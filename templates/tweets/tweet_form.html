@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}{% if form.instance.pk %}Edit Tweet{% else %}New Tweet{% endif %}{% endblock %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">
+                    {% if form.instance.pk %}Edit Tweet{% else %}New Tweet{% endif %}
+                </legend>
+                {{ form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-primary" type="submit">
+                    {% if form.instance.pk %}Update{% else %}Tweet{% endif %}
+                </button>
+                <a class="btn btn-outline-secondary" href="{% url 'home' %}">Cancel</a>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        // Character counter for tweet form
+        $('#id_content').on('input', function() {
+            var maxLength = 280;
+            var currentLength = $(this).val().length;
+            var remaining = maxLength - currentLength;
+            
+            // Add counter if it doesn't exist
+            if ($('.tweet-form-counter').length === 0) {
+                $(this).after('<div class="tweet-form-counter mt-2">' + remaining + ' characters remaining</div>');
+            } else {
+                $('.tweet-form-counter').text(remaining + ' characters remaining');
+            }
+            
+            if (remaining <= 20) {
+                $('.tweet-form-counter').addClass('text-warning');
+            } else {
+                $('.tweet-form-counter').removeClass('text-warning');
+            }
+            
+            if (remaining <= 0) {
+                $('.tweet-form-counter').addClass('text-danger');
+            } else {
+                $('.tweet-form-counter').removeClass('text-danger');
+            }
+        });
+        
+        // Trigger the input event to initialize the counter
+        $('#id_content').trigger('input');
+    });
+</script>
+{% endblock extra_js %}

@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    {% if user.is_authenticated %}
+        <div class="tweet-form-container">
+            <h3>What's happening?</h3>
+            <form method="POST" action="{% url 'tweet-create' %}" enctype="multipart/form-data" class="tweet-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <textarea name="content" class="form-control" rows="3" placeholder="What's happening?" maxlength="280" required id="id_content"></textarea>
+                </div>
+                <div class="form-group">
+                    <input type="file" name="image" class="form-control-file" id="id_image">
+                </div>
+                <div class="tweet-form-footer">
+                    <span class="tweet-form-counter">280</span>
+                    <button type="submit" class="btn btn-primary">Tweet</button>
+                </div>
+            </form>
+        </div>
+    {% endif %}
+
+    <h3 class="mb-3">Timeline</h3>
+    {% if tweets %}
+        {% for tweet in tweets %}
+            <div class="tweet-container">
+                <div class="tweet-header">
+                    <img class="tweet-avatar" src="{{ tweet.author.profile.image.url }}" alt="{{ tweet.author.username }}">
+                    <div class="tweet-user-info">
+                        <a href="{% url 'user-profile' tweet.author.username %}" class="tweet-username">{{ tweet.author.username }}</a>
+                        <span class="tweet-time">{{ tweet.date_posted|date:"F d, Y" }}</span>
+                    </div>
+                </div>
+                <div class="tweet-content">
+                    {{ tweet.content }}
+                </div>
+                {% if tweet.image %}
+                    <img src="{{ tweet.image.url }}" alt="Tweet image" class="tweet-image">
+                {% endif %}
+                <div class="tweet-actions">
+                    <div class="tweet-action">
+                        <a href="{% url 'tweet-detail' tweet.id %}">
+                            <i class="far fa-comment"></i> {{ tweet.get_comments_count }}
+                        </a>
+                    </div>
+                    <div class="tweet-action">
+                        <a href="{% url 'like-tweet' tweet.id %}" class="">
+                            <i class="far fa-heart"></i> {{ tweet.get_likes_count }}
+                        </a>
+                    </div>
+                    {% if user == tweet.author %}
+                        <div class="tweet-action">
+                            <a href="{% url 'tweet-update' tweet.id %}">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                        </div>
+                        <div class="tweet-action">
+                            <a href="{% url 'tweet-delete' tweet.id %}">
+                                <i class="fas fa-trash"></i> Delete
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+
+        {% if is_paginated %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                        </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% else %}
+        <p>No tweets found. {% if user.is_authenticated %}Follow some users or post your first tweet!{% else %}Sign up and start tweeting!{% endif %}</p>
+    {% endif %}
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        // Character counter for tweet form
+        $('#id_content').on('input', function() {
+            var maxLength = 280;
+            var currentLength = $(this).val().length;
+            var remaining = maxLength - currentLength;
+
+            $('.tweet-form-counter').text(remaining);
+
+            if (remaining <= 20) {
+                $('.tweet-form-counter').addClass('warning');
+            } else {
+                $('.tweet-form-counter').removeClass('warning');
+            }
+
+            if (remaining <= 0) {
+                $('.tweet-form-counter').addClass('danger');
+            } else {
+                $('.tweet-form-counter').removeClass('danger');
+            }
+        });
+    });
+</script>
+{% endblock extra_js %}

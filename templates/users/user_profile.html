@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}{{ user_profile.username }}'s Profile{% endblock %}
+{% block content %}
+    <div class="content-section">
+        <div class="media">
+            <img class="rounded-circle account-img" src="{{ user_profile.profile.image.url }}">
+            <div class="media-body">
+                <h2 class="account-heading">{{ user_profile.username }}</h2>
+                
+                {% if user.is_authenticated and user != user_profile %}
+                    {% if is_following %}
+                        <a href="{% url 'unfollow-user' user_profile.username %}" class="btn btn-sm btn-outline-danger follow-btn">Unfollow</a>
+                    {% else %}
+                        <a href="{% url 'follow-user' user_profile.username %}" class="btn btn-sm btn-outline-primary follow-btn">Follow</a>
+                    {% endif %}
+                {% endif %}
+                
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <span class="profile-stat-count">{{ user_profile.tweets.count }}</span> Tweets
+                    </div>
+                    <div class="profile-stat">
+                        <a href="{% url 'followers-list' user_profile.username %}">
+                            <span class="profile-stat-count">{{ followers_count }}</span> Followers
+                        </a>
+                    </div>
+                    <div class="profile-stat">
+                        <a href="{% url 'following-list' user_profile.username %}">
+                            <span class="profile-stat-count">{{ following_count }}</span> Following
+                        </a>
+                    </div>
+                </div>
+                
+                {% if user_profile.profile.bio %}
+                <div class="profile-bio">
+                    <p>{{ user_profile.profile.bio }}</p>
+                </div>
+                {% endif %}
+                
+                {% if user_profile.profile.location %}
+                <p><i class="fas fa-map-marker-alt"></i> {{ user_profile.profile.location }}</p>
+                {% endif %}
+                
+                {% if user_profile.profile.website %}
+                <p><i class="fas fa-link"></i> <a href="{{ user_profile.profile.website }}" target="_blank">{{ user_profile.profile.website }}</a></p>
+                {% endif %}
+                
+                {% if user_profile.profile.birth_date %}
+                <p><i class="fas fa-birthday-cake"></i> {{ user_profile.profile.birth_date }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <h3 class="mb-3">{{ user_profile.username }}'s Tweets</h3>
+    {% if tweets %}
+        {% for tweet in tweets %}
+            <div class="tweet-container">
+                <div class="tweet-header">
+                    <img class="tweet-avatar" src="{{ tweet.author.profile.image.url }}" alt="{{ tweet.author.username }}">
+                    <div class="tweet-user-info">
+                        <a href="{% url 'user-profile' tweet.author.username %}" class="tweet-username">{{ tweet.author.username }}</a>
+                        <span class="tweet-time">{{ tweet.date_posted|date:"F d, Y" }}</span>
+                    </div>
+                </div>
+                <div class="tweet-content">
+                    {{ tweet.content }}
+                </div>
+                {% if tweet.image %}
+                    <img src="{{ tweet.image.url }}" alt="Tweet image" class="tweet-image">
+                {% endif %}
+                <div class="tweet-actions">
+                    <div class="tweet-action">
+                        <a href="{% url 'tweet-detail' tweet.id %}">
+                            <i class="far fa-comment"></i> {{ tweet.get_comments_count }}
+                        </a>
+                    </div>
+                    <div class="tweet-action">
+                        <a href="{% url 'like-tweet' tweet.id %}">
+                            <i class="far fa-heart"></i> {{ tweet.get_likes_count }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>{{ user_profile.username }} hasn't posted any tweets yet.</p>
+    {% endif %}
+{% endblock content %}

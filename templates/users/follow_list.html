@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+    <h2 class="mb-4">{{ title }}</h2>
+    
+    {% if followers %}
+        <div class="list-group">
+            {% for follow in followers %}
+                <div class="list-group-item">
+                    <div class="d-flex align-items-center">
+                        <img class="rounded-circle mr-3" width="50" height="50" src="{{ follow.follower.profile.image.url }}">
+                        <div>
+                            <h5 class="mb-1"><a href="{% url 'user-profile' follow.follower.username %}">{{ follow.follower.username }}</a></h5>
+                            {% if follow.follower.profile.bio %}
+                                <p class="mb-1">{{ follow.follower.profile.bio|truncatechars:100 }}</p>
+                            {% endif %}
+                            <small class="text-muted">Following since {{ follow.created_at|date:"F d, Y" }}</small>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% elif following %}
+        <div class="list-group">
+            {% for follow in following %}
+                <div class="list-group-item">
+                    <div class="d-flex align-items-center">
+                        <img class="rounded-circle mr-3" width="50" height="50" src="{{ follow.following.profile.image.url }}">
+                        <div>
+                            <h5 class="mb-1"><a href="{% url 'user-profile' follow.following.username %}">{{ follow.following.username }}</a></h5>
+                            {% if follow.following.profile.bio %}
+                                <p class="mb-1">{{ follow.following.profile.bio|truncatechars:100 }}</p>
+                            {% endif %}
+                            <small class="text-muted">Following since {{ follow.created_at|date:"F d, Y" }}</small>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No users found.</p>
+    {% endif %}
+    
+    <div class="mt-3">
+        <a href="{% url 'user-profile' user_profile.username %}" class="btn btn-outline-primary">Back to Profile</a>
+    </div>
+{% endblock content %}

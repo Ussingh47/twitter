@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Tweet{% endblock %}
+{% block content %}
+    <div class="tweet-container">
+        <div class="tweet-header">
+            <img class="tweet-avatar" src="{{ object.author.profile.image.url }}" alt="{{ object.author.username }}">
+            <div class="tweet-user-info">
+                <a href="{% url 'user-profile' object.author.username %}" class="tweet-username">{{ object.author.username }}</a>
+                <span class="tweet-time">{{ object.date_posted|date:"F d, Y" }}</span>
+            </div>
+        </div>
+        <div class="tweet-content">
+            {{ object.content }}
+        </div>
+        {% if object.image %}
+            <img src="{{ object.image.url }}" alt="Tweet image" class="tweet-image">
+        {% endif %}
+        <div class="tweet-actions">
+            <div class="tweet-action">
+                <i class="far fa-comment"></i> {{ object.get_comments_count }}
+            </div>
+            <div class="tweet-action">
+                <a href="{% url 'like-tweet' object.id %}" class="{% if liked %}liked{% endif %}">
+                    <i class="{% if liked %}fas{% else %}far{% endif %} fa-heart"></i> {{ object.get_likes_count }}
+                </a>
+            </div>
+            {% if user == object.author %}
+                <div class="tweet-action">
+                    <a href="{% url 'tweet-update' object.id %}">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                </div>
+                <div class="tweet-action">
+                    <a href="{% url 'tweet-delete' object.id %}">
+                        <i class="fas fa-trash"></i> Delete
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="comment-container">
+        <h4>Comments ({{ object.get_comments_count }})</h4>
+        
+        {% if user.is_authenticated %}
+            <form method="POST" action="{% url 'add-comment' object.id %}">
+                {% csrf_token %}
+                {{ comment_form|crispy }}
+                <button type="submit" class="btn btn-primary">Add Comment</button>
+            </form>
+        {% endif %}
+        
+        {% if comments %}
+            {% for comment in comments %}
+                <div class="comment">
+                    <div class="comment-header">
+                        <img class="comment-avatar" src="{{ comment.author.profile.image.url }}" alt="{{ comment.author.username }}">
+                        <a href="{% url 'user-profile' comment.author.username %}" class="comment-username">{{ comment.author.username }}</a>
+                        <span class="comment-time">{{ comment.date_posted|date:"F d, Y" }}</span>
+                        
+                        {% if user == comment.author %}
+                            <a href="{% url 'delete-comment' comment.id %}" class="text-danger ml-2">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="comment-content">
+                        {{ comment.content }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No comments yet.</p>
+        {% endif %}
+    </div>
+{% endblock content %}

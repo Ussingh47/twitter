@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Add Comment{% endblock %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Add Comment</legend>
+                <div class="tweet-container">
+                    <div class="tweet-header">
+                        <img class="tweet-avatar" src="{{ tweet.author.profile.image.url }}" alt="{{ tweet.author.username }}">
+                        <div class="tweet-user-info">
+                            <a href="{% url 'user-profile' tweet.author.username %}" class="tweet-username">{{ tweet.author.username }}</a>
+                            <span class="tweet-time">{{ tweet.date_posted|date:"F d, Y" }}</span>
+                        </div>
+                    </div>
+                    <div class="tweet-content">
+                        {{ tweet.content }}
+                    </div>
+                    {% if tweet.image %}
+                        <img src="{{ tweet.image.url }}" alt="Tweet image" class="tweet-image">
+                    {% endif %}
+                </div>
+                {{ form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-primary" type="submit">Add Comment</button>
+                <a class="btn btn-outline-secondary" href="{% url 'tweet-detail' tweet.id %}">Cancel</a>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

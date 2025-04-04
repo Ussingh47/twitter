@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+    <div class="content-section">
+        <div class="media">
+            <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+            <div class="media-body">
+                <h2 class="account-heading">{{ user.username }}</h2>
+                <p class="text-secondary">{{ user.email }}</p>
+                
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <span class="profile-stat-count">{{ user.tweets.count }}</span> Tweets
+                    </div>
+                    <div class="profile-stat">
+                        <a href="{% url 'followers-list' user.username %}">
+                            <span class="profile-stat-count">{{ user.followers.count }}</span> Followers
+                        </a>
+                    </div>
+                    <div class="profile-stat">
+                        <a href="{% url 'following-list' user.username %}">
+                            <span class="profile-stat-count">{{ user.following.count }}</span> Following
+                        </a>
+                    </div>
+                </div>
+                
+                {% if user.profile.bio %}
+                <div class="profile-bio">
+                    <p>{{ user.profile.bio }}</p>
+                </div>
+                {% endif %}
+                
+                {% if user.profile.location %}
+                <p><i class="fas fa-map-marker-alt"></i> {{ user.profile.location }}</p>
+                {% endif %}
+                
+                {% if user.profile.website %}
+                <p><i class="fas fa-link"></i> <a href="{{ user.profile.website }}" target="_blank">{{ user.profile.website }}</a></p>
+                {% endif %}
+                
+                {% if user.profile.birth_date %}
+                <p><i class="fas fa-birthday-cake"></i> {{ user.profile.birth_date }}</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Profile Info</legend>
+                {{ u_form|crispy }}
+                {{ p_form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-primary" type="submit">Update</button>
+            </div>
+        </form>
+    </div>
+    
+    <h3 class="mb-3">Your Tweets</h3>
+    {% if tweets %}
+        {% for tweet in tweets %}
+            <div class="tweet-container">
+                <div class="tweet-header">
+                    <img class="tweet-avatar" src="{{ tweet.author.profile.image.url }}" alt="{{ tweet.author.username }}">
+                    <div class="tweet-user-info">
+                        <a href="{% url 'user-profile' tweet.author.username %}" class="tweet-username">{{ tweet.author.username }}</a>
+                        <span class="tweet-time">{{ tweet.date_posted|date:"F d, Y" }}</span>
+                    </div>
+                </div>
+                <div class="tweet-content">
+                    {{ tweet.content }}
+                </div>
+                {% if tweet.image %}
+                    <img src="{{ tweet.image.url }}" alt="Tweet image" class="tweet-image">
+                {% endif %}
+                <div class="tweet-actions">
+                    <div class="tweet-action">
+                        <a href="{% url 'tweet-detail' tweet.id %}">
+                            <i class="far fa-comment"></i> {{ tweet.get_comments_count }}
+                        </a>
+                    </div>
+                    <div class="tweet-action">
+                        <a href="{% url 'like-tweet' tweet.id %}">
+                            <i class="far fa-heart"></i> {{ tweet.get_likes_count }}
+                        </a>
+                    </div>
+                    <div class="tweet-action">
+                        <a href="{% url 'tweet-update' tweet.id %}">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                    </div>
+                    <div class="tweet-action">
+                        <a href="{% url 'tweet-delete' tweet.id %}">
+                            <i class="fas fa-trash"></i> Delete
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>You haven't posted any tweets yet.</p>
+    {% endif %}
+{% endblock content %}

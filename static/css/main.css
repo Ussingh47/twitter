@@ -1,0 +1,289 @@
+body {
+    background: #f8f9fa;
+    color: #333333;
+    margin-top: 5rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #444444;
+}
+
+.bg-primary {
+    background-color: #1DA1F2 !important;
+}
+
+.site-header .navbar-nav .nav-link {
+    color: #cbd5db;
+}
+
+.site-header .navbar-nav .nav-link:hover {
+    color: #ffffff;
+}
+
+.site-header .navbar-nav .nav-link.active {
+    font-weight: 500;
+}
+
+.content-section {
+    background: #ffffff;
+    padding: 10px 20px;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+}
+
+.article-title {
+    color: #444444;
+}
+
+a.article-title:hover {
+    color: #428bca;
+    text-decoration: none;
+}
+
+.article-content {
+    white-space: pre-line;
+}
+
+.article-img {
+    height: 65px;
+    width: 65px;
+    margin-right: 16px;
+}
+
+.article-metadata {
+    padding-bottom: 1px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #e3e3e3
+}
+
+.article-metadata a:hover {
+    color: #333;
+    text-decoration: none;
+}
+
+.article-svg {
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+}
+
+.account-img {
+    height: 125px;
+    width: 125px;
+    margin-right: 20px;
+    margin-bottom: 16px;
+}
+
+.account-heading {
+    font-size: 2.5rem;
+}
+
+.tweet-container {
+    border: 1px solid #e1e8ed;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: white;
+}
+
+.tweet-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.tweet-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.tweet-user-info {
+    flex-grow: 1;
+}
+
+.tweet-username {
+    font-weight: bold;
+    color: #14171a;
+    text-decoration: none;
+}
+
+.tweet-handle, .tweet-time {
+    color: #657786;
+    font-size: 0.9em;
+}
+
+.tweet-content {
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    line-height: 1.4;
+}
+
+.tweet-image {
+    max-width: 100%;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.tweet-actions {
+    display: flex;
+    justify-content: space-between;
+    color: #657786;
+    font-size: 0.9em;
+}
+
+.tweet-action {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.tweet-action i {
+    margin-right: 5px;
+}
+
+.tweet-action:hover {
+    color: #1DA1F2;
+}
+
+.liked {
+    color: #E0245E;
+}
+
+.comment-container {
+    border-top: 1px solid #e1e8ed;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+.comment {
+    padding: 10px;
+    border-bottom: 1px solid #e1e8ed;
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.comment-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.comment-username {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.comment-time {
+    color: #657786;
+    font-size: 0.8em;
+}
+
+.comment-content {
+    margin-left: 40px;
+}
+
+.follow-btn {
+    margin-left: 10px;
+}
+
+.profile-stats {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.profile-stat {
+    margin-right: 20px;
+}
+
+.profile-stat-count {
+    font-weight: bold;
+}
+
+.profile-bio {
+    margin-bottom: 15px;
+}
+
+.search-result {
+    margin-bottom: 20px;
+}
+
+.user-result {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #e1e8ed;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.user-result-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.user-result-info {
+    flex-grow: 1;
+}
+
+.user-result-username {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.user-result-fullname {
+    color: #657786;
+}
+
+.tweet-form-container {
+    margin-bottom: 20px;
+}
+
+.tweet-form textarea {
+    resize: none;
+    border: 1px solid #e1e8ed;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.tweet-form-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tweet-form-counter {
+    color: #657786;
+}
+
+.tweet-form-counter.warning {
+    color: #FFAD1F;
+}
+
+.tweet-form-counter.danger {
+    color: #E0245E;
+}
+
+/* Logout button styling */
+.btn.nav-item.nav-link {
+    background: none;
+    border: none;
+    color: #cbd5db;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+.btn.nav-item.nav-link:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
