@@ -1,7 +1,5 @@
 # Twitter Clone
 
-![Twitter Clone](https://raw.githubusercontent.com/Ussingh47/twitter/main/static/img/twitter-clone-preview.png)
-
 A full-featured Twitter clone built with Django, featuring user authentication, tweets, likes, comments, and follows. This project demonstrates the implementation of a social media platform with core Twitter functionalities.
 
 ## Features
